@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/tierhub/items")
+@RequestMapping("/api/items")
 public class ItemController {
     @Autowired
     ItemService itemService;

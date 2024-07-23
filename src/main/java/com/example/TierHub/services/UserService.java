@@ -1,14 +1,15 @@
 package com.example.TierHub.services;
 
+import com.example.TierHub.DTO.GetTierListDTO;
 import com.example.TierHub.entities.TierList;
 import com.example.TierHub.entities.User;
-import com.example.TierHub.repos.TierListRepository;
 import com.example.TierHub.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,5 +31,6 @@ public class UserService {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
+
 }
 

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/tierhub/tiers")
+@RequestMapping("/api/tiers")
 public class TierController {
     @Autowired
     TierService tierService;

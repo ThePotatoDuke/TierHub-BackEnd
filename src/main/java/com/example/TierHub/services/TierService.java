@@ -69,7 +69,7 @@ public class TierService {
     }
 
     public List<Tier> findTiersByTierListId(Long tierListId) {
-        return tierRepository.findByTierListId(tierListId);
+        return tierRepository.findAllByTierListIdOrderByPosition(tierListId);
     }
 
 }

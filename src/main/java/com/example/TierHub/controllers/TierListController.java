@@ -1,6 +1,7 @@
 package com.example.TierHub.controllers;
 
 import com.example.TierHub.DTO.CreateTierListDTO;
+import com.example.TierHub.DTO.GetTierListDTO;
 import com.example.TierHub.entities.*;
 import com.example.TierHub.services.CategoryService;
 import com.example.TierHub.services.TierListService;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/tierhub/tier_lists")
+@RequestMapping("/api/tier_lists")
 public class TierListController {
     @Autowired
     private TierListService tierListService;
@@ -83,6 +84,10 @@ public class TierListController {
         } else {
             return ResponseEntity.ok(tiers);
         }
+    }
+    @GetMapping("/user/{userId}")
+    public List<GetTierListDTO> getAllTierListsByUserId(@PathVariable Long userId) {
+        return tierListService.getAllTierListsByUserId(userId);
     }
 
 }

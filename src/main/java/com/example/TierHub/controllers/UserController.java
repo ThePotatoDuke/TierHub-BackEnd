@@ -1,5 +1,6 @@
 package com.example.TierHub.controllers;
 
+import com.example.TierHub.entities.Tier;
 import com.example.TierHub.entities.TierList;
 import com.example.TierHub.entities.User;
 import com.example.TierHub.services.UserService;
@@ -10,17 +11,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @RestController
-@RequestMapping("/tierhub/users")
+@RequestMapping("/api/users")
 public class UserController
 {
     @Autowired
     UserService userService;
     @GetMapping
-    public List<User> getAllUsers(){
-        return userService.findAll();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.findAll();
+        return ResponseEntity.ok(users);
     }
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById (@PathVariable Long id){
@@ -50,5 +51,6 @@ public class UserController
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
 
 }

@@ -1,6 +1,8 @@
 package com.example.TierHub.services;
 
 import com.example.TierHub.DTO.CreateTierListDTO;
+import com.example.TierHub.DTO.GetTierListDTO;
+import com.example.TierHub.DTO.TierListMapper;
 import com.example.TierHub.Exceptions.ResourceNotFoundException;
 import com.example.TierHub.entities.*;
 import com.example.TierHub.repos.CategoryRepository;
@@ -108,6 +110,16 @@ public class TierListService {
                 .flatMap(tier -> tier.getItems().stream())
                 .collect(Collectors.toList());
     }
+    @Autowired
+    private TierListMapper tierListMapper;
+
+    public List<GetTierListDTO> getAllTierListsByUserId(Long userId) {
+        List<TierList> tierLists = tierListRepository.findByUserId(userId);
+        return tierLists.stream()
+                .map(tierListMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
     public List<TierList> search(Long categoryId, Long userId, String name) {
         Optional<Category> category = categoryRepository.findById(categoryId);

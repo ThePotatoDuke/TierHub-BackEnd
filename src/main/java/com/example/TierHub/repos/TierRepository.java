@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface TierRepository extends JpaRepository<Tier,Long> {
     List<Tier> findByTierListId(Long tierListId);
-
+    @Query("SELECT t FROM Tier t WHERE t.tierList.id = :tierListId ORDER BY t.position")
+    List<Tier> findAllByTierListIdOrderByPosition(Long tierListId);
 }

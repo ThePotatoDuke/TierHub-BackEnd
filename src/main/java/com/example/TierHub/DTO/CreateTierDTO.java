@@ -9,5 +9,5 @@ public record CreateTierDTO(
         int position,
         String color,
         Long tierListID,
-        Set<Item> items
+        Set<Long> itemIds // Use item IDs instead of entire item objects
 ) {}

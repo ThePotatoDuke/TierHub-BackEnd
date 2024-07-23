@@ -14,6 +14,8 @@ public interface TierListRepository extends JpaRepository<TierList, Long> {
 
     List<TierList> findByUser(User user);
 
+    List<TierList> findByUserId(Long userId);
+
     List<TierList> findByName(String name);
 
     List<TierList> findByCategoryAndUser(Category category, User user);
