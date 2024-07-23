@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class Item {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "order_no")
