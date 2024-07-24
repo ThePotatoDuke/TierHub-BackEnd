@@ -27,7 +27,7 @@ public class User {
     @Column(name = "username")
     private String userName;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private Set<TierList> tierLists = new HashSet<>();
 
