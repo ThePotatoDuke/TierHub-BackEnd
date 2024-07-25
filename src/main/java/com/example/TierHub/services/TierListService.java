@@ -8,6 +8,7 @@ import com.example.TierHub.Exceptions.StorageException;
 import com.example.TierHub.entities.*;
 import com.example.TierHub.repos.CategoryRepository;
 import com.example.TierHub.repos.TierListRepository;
+import com.example.TierHub.repos.TierRepository;
 import com.example.TierHub.repos.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -30,6 +31,8 @@ import java.util.stream.Collectors;
 public class TierListService {
     @Autowired
     private TierListRepository tierListRepository;
+    @Autowired
+    private TierRepository tierRepository;
     private static final Logger logger = LoggerFactory.getLogger(TierListService.class);
 
     @Autowired
@@ -73,8 +76,21 @@ public class TierListService {
     }
 
     public TierList save(CreateTierListDTO tierListDTO) {
+        // Create the default Tier
+        Tier defaultTier = new Tier();
+        defaultTier.setName("Default Tier");
+        // Set other properties for defaultTier as needed
+
+        // Save the default Tier
+        Tier savedDefaultTier = tierRepository.save(defaultTier);
+
+        // Create TierList
         TierList tierList = new TierList();
-        mapDtoToEntity(tierList, tierListDTO);
+        tierList.setName(tierListDTO.name());
+        tierList.setDescription(tierListDTO.description());
+        tierList.setDefaultTier(savedDefaultTier);
+
+        // Save the TierList
         return tierListRepository.save(tierList);
     }
     public TierList update(Long tierListId, CreateTierListDTO tierListDTO) {

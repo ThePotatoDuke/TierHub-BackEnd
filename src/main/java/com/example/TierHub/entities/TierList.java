@@ -42,6 +42,11 @@ public class TierList {
     @JsonManagedReference
     private Set<Tier> tiers = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(name = "default_tier_id")
+    private Tier defaultTier;
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

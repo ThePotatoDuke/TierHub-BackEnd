@@ -61,7 +61,8 @@ public class TierService {
                     .orElseThrow(() -> new ResourceNotFoundException("TierList not found with id " + createTierDTO.tierListID()));
             tier.setTierList(tierList);
         }
-        return tier;
+        // Save and return the updated tier
+        return tierRepository.save(tier);
     }
 
     public void deleteById(Long id) {

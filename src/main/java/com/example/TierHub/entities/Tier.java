@@ -31,7 +31,7 @@ public class Tier {
     @JsonBackReference
     private TierList tierList;
 
-    @OneToMany(mappedBy = "tier", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "tier", fetch = FetchType.EAGER)
     private Set<Item> items = new HashSet<>();
 
     @Override
