@@ -45,9 +45,12 @@ public class TierListService {
         return tierListRepository.findAll();
     }
 
-    public Optional<TierList> findById(Long id) {
-        return tierListRepository.findById(id);
+    public TierList findById(Long tierListId) {
+        return tierListRepository.findById(tierListId)
+                .orElseThrow(() -> new RuntimeException("TierList not found"));
     }
+
+
 
     public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
@@ -73,24 +76,28 @@ public class TierListService {
                     .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + tierListDTO.categoryId()));
             tierList.setCategory(category);
         }
+
     }
 
     public TierList save(CreateTierListDTO tierListDTO) {
-        // Create the default Tier
-        Tier defaultTier = new Tier();
-        defaultTier.setName("Default Tier");
-        // Set other properties for defaultTier as needed
-
-        // Save the default Tier
-        Tier savedDefaultTier = tierRepository.save(defaultTier);
-
-        // Create TierList
+        // Create a new TierList
         TierList tierList = new TierList();
-        tierList.setName(tierListDTO.name());
-        tierList.setDescription(tierListDTO.description());
-        tierList.setDefaultTier(savedDefaultTier);
 
-        // Save the TierList
+        // Map DTO to entity
+        mapDtoToEntity(tierList, tierListDTO);
+
+        // Create and save the default tier
+        Tier defaultTier = new Tier();
+        defaultTier.setName("default tier");
+        defaultTier.setPosition(-1);
+
+        // Save the default tier to obtain its ID
+        defaultTier = tierRepository.save(defaultTier);
+
+        // Set the saved default tier to the tierList
+        tierList.setDefaultTier(defaultTier);
+
+        // Save and return the TierList
         return tierListRepository.save(tierList);
     }
     public TierList update(Long tierListId, CreateTierListDTO tierListDTO) {

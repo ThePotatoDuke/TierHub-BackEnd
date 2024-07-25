@@ -2,6 +2,7 @@ package com.example.TierHub.controllers;
 
 import com.example.TierHub.DTO.CreateTierListDTO;
 import com.example.TierHub.DTO.GetTierListDTO;
+import com.example.TierHub.DTO.TierListResponse;
 import com.example.TierHub.entities.*;
 import com.example.TierHub.services.CategoryService;
 import com.example.TierHub.services.TierListService;
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/tier_lists")
@@ -30,9 +28,19 @@ public class TierListController {
         return ResponseEntity.ok(tierLists);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<TierList> getTierListById(@PathVariable("id") Long id){
-        Optional<TierList>  tierList = tierListService.findById(id);
-        return tierList.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<TierListResponse> getTierListById(@PathVariable("id") Long id) {
+        try {
+            TierList tierList = tierListService.findById(id);
+
+            // Prepare the response DTO
+            TierListResponse response = new TierListResponse();
+            response.setTiers(new ArrayList<>(tierList.getTiers())); // Assuming tierList.getTiers() returns a Set or List
+            response.setDefaultTier(tierList.getDefaultTier());
+
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
     @PostMapping
     public ResponseEntity<TierList> createTierList(@RequestBody CreateTierListDTO tierListDTO) {
@@ -81,14 +89,19 @@ public class TierListController {
     }
 
     @GetMapping("/{tierListId}/tiers")
-    public ResponseEntity<List<Tier>> getTiersInTierList(@PathVariable Long tierListId) {
-        List<Tier> tiers = tierListService.findAllTiersInTierList(tierListId);
-        if (tiers.isEmpty()) {
+    public ResponseEntity<TierListResponse> getTiersInTierList(@PathVariable Long tierListId) {
+        TierListResponse response = new TierListResponse();
+        TierList tierList = tierListService.findById(tierListId); // Find the TierList including the defaultTier
+
+        if (tierList == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(tiers);
+            response.setTiers(new ArrayList<>(tierList.getTiers()));
+            response.setDefaultTier(tierList.getDefaultTier());
+            return ResponseEntity.ok(response);
         }
     }
+
     @GetMapping("/user/{userId}")
     public List<GetTierListDTO> getAllTierListsByUserId(@PathVariable Long userId) {
         return tierListService.getAllTierListsByUserId(userId);
